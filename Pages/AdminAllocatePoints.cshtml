@@ -1,0 +1,86 @@
+﻿@page "/adminallocatepoints"
+@using HabitApp.Models
+@model HabitApp.Pages.AdminAllocatePointsModel
+@{
+}
+
+<div class="container">
+    <h2 style="align-content: center">My Habits</h2>
+    <table class="table table-primary table-striped table-borderless" style="margin-top: 3rem; border-radius:0.5rem">
+        <thead>
+            <tr>
+                <th scope="col">Habit Status</th>
+                <th scope="col">Habit Image</th>
+                <th scope="col">ID</th>
+                <th scope="col">Habit</th>
+                <th scope="col">Description</th>
+                <th scope="col">Allocate Points</th>
+                <th style="text-align:center; align-items:center" scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.HabitDataModels)
+            {
+                <tr>
+                    <td id="hstatus">@item.habitStatus</td>
+                    <td><img style="width:100px; height:100px" src="@item.habitImage" /></td>
+                    <td id="hid">@item.habitId</td>
+                    <td id="htitle">@item.habitTitle</td>
+                    <td id="hdescription">@item.habitDescription</td>
+                    <td id="haudio" hidden>@item.habitAudio</td>
+                    <td id="himage" hidden>@item.habitImage</td>
+
+                    <td id="hpoints">
+                        <form method="post">
+                            <input type="number"
+                                   id="addpoints"
+                                   value="0"
+                                   style="width:65px" />
+
+                            <button type="button"
+                                    class="btn btn-success"
+                                    onclick="addpoint()"
+                                    style="margin-left: 10px">
+                                Save
+                            </button>
+                        </form>
+                    </td>
+
+                    <td id="hvideo" hidden>@item.habitVideoUrl</td>
+                    <td style="text-align:center">
+                        <button type="button" class="btn btn-primary" onclick="viewpage(this)">View</button>
+
+                    </td>
+                </tr>
+            };
+        </tbody>
+    </table>
+
+    <script>
+        function viewpage() {
+            var idtext = document.getElementById("hid").innerText
+            var titleText = document.getElementById("htitle").innerText
+            var descriptiontext = document.getElementById("hdescription").innerText
+            var audiotext = document.getElementById("haudio").innerText
+            var imagetext = document.getElementById("himage").innerText
+            var statustext = document.getElementById("hstatus").innerText
+            var pointtext = document.getElementById("hpoints").innerText
+            var videourltext = document.getElementById("hvideo").innerText
+
+            window.localStorage.setItem("imagetext", imagetext)
+            window.localStorage.setItem("audio", audiotext)
+
+            window.location.replace("/viewsinglehabit?hid=" + idtext + "&htitle=" + titleText + "&hdescription=" + descriptiontext + "&hstatus=" + statustext + "&hpoints=" + pointtext + "&hvideo=" + videourltext);
+
+        }
+
+        function addpoint() {
+            var points = document.getElementById("hpoints").value
+
+            //Alert message for successful point allocation
+            alert("Successfully Saved!");
+        }
+    </script>
+</div>
+

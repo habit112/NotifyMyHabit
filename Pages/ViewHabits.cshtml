@@ -1,0 +1,107 @@
+﻿@page "/viewhabits"
+@using HabitApp.Models
+@model HabitApp.Pages.ViewHabitsModel
+@{
+}
+
+
+<div id="msg">You are not logged in please <a href="/login">Login</a></div>
+<div class="container" id="view">
+	<h2 style="align-content: center">My Habits</h2>
+    <form method="post">
+        <input type="text" id="habitIdVal"  asp-for="HabitModel.habitId" hidden/>
+        <button type="submit">Refresh</button>
+    </form>
+	<table class="table table-primary table-striped table-borderless" style="margin-top: 3rem; border-radius:0.5rem">
+  <thead>
+    <tr>
+      <th scope="col">Habit Status</th>
+      <th scope="col">Habit Image</th>
+      <th scope="col">ID</th>
+      <th scope="col">Habit</th>
+      <th scope="col">Description</th>
+      <th style="text-align:center; align-items:center" scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      @if (Model.HabitDataModels != null)
+      {
+      @foreach (var item in Model.HabitDataModels)
+      {
+          <tr>
+              <td><input type="checkbox" id="checkHabit" name="checkHabit" value="checkHabit"></td>
+              <td><img style="width:100px; height:100px" src="@item.habitImage" /></td>
+              <td id="hid">@item.habitId</td>
+              <td id="htitle">@item.habitTitle</td>
+              <td id="hdescription">@item.habitDescription</td>
+              <td id="haudio" hidden>@item.habitAudio</td>
+              <td id="himage" hidden>@item.habitImage</td>
+              <td id="hpoints" hidden>@item.habitPoints</td>
+              <td id="hstatus" hidden>@item.habitStatus</td>
+              <td id="hvideo" hidden>@item.habitVideoUrl</td>
+              <td style="text-align:center">
+                  <button type="button" class="btn btn-primary" onclick="viewpage('viewsinglehabit','@item.habitImage','@item.habitId','@item.habitTitle','@item.habitDescription','@item.habitAudio','@item.habitPoints','@item.habitStatus','@item.habitVideoUrl')">View</button>
+                  <button type="button" class="btn btn-secondary" onclick="viewpage('updatehabit','@item.habitImage','@item.habitId','@item.habitTitle','@item.habitDescription','@item.habitAudio','@item.habitPoints','@item.habitStatus','@item.habitVideoUrl')">Update</button>
+
+                  <form method="post">
+                      <input type="text" hidden value="@item.habitId" asp-for="HabitModel.habitId" />
+                      <input type="text" hidden value="delete" asp-for="HabitModel.habitDescription" />
+                      <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+
+              </td>
+          </tr>
+      }
+      }
+  </tbody>
+</table>
+
+    <script>
+        if (window.localStorage.getItem("id") != null) { document.getElementById("habitIdVal").value = window.localStorage.getItem("id")}
+        
+
+        function viewpage(pagename,image,id,title,desc, audio, points, status, videoUrl)
+        {
+            var idtext = id
+            var titleText = title
+            var descriptiontext = desc
+            var audiotext = audio
+            var imagetext = image
+            var statustext = status
+            var pointtext = points
+            var videourltext = videoUrl
+
+
+            window.localStorage.setItem("imagetext", imagetext)
+            window.localStorage.setItem("audio", audiotext)
+
+
+          
+                window.location.replace("/"+pagename+"?hid=" + idtext + "&htitle=" + titleText + "&hdescription=" + descriptiontext + "&hstatus=" + statustext + "&hpoints=" + pointtext + "&hvideo=" + videourltext);
+            
+            
+        }
+
+
+    </script>
+</div>
+
+<script>
+    var email = window.localStorage.getItem("email")
+
+    if (email == null) {
+        document.getElementById("msg").hidden = false
+        document.getElementById("view").hidden = true
+    } else
+    {
+        document.getElementById("msg").hidden = true
+        document.getElementById("view").hidden = false
+
+    }
+</script>
+
+
+
+
+
